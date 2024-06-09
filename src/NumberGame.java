@@ -4,7 +4,7 @@ import java.awt.event.ActionListener;
 
 public class NumberGame {
     private double guessedNumber;
-    private double lowLimit = 0;
+    private double lowLimit = 1;
     private double highLimit = 100;
     private int counter = 0;
 
@@ -17,6 +17,7 @@ public class NumberGame {
     private JButton buttonStart;
 
     public NumberGame(){
+        String text = textField.getText();
         buttonSmaller.setVisible(false);
         buttonGreater.setVisible(false);
         textField.setFocusable(false);
@@ -29,11 +30,19 @@ public class NumberGame {
         buttonStart.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+
+                if(highLimit != 100 && lowLimit != 0){
+                    buttonSmaller.setVisible(false);
+                    buttonGreater.setVisible(false);
+                    textField.setText(text);
+                    counter = 0;
+                }
+
                 guessedNumber = (highLimit + lowLimit) / 2;
                 buttonSmaller.setVisible(true);
                 buttonGreater.setVisible(true);
                 buttonStart.setVisible(false);
-                textField.setText(textField.getText() + String.valueOf((int) guessedNumber) + "?");
+                textField.setText(text + String.valueOf((int) guessedNumber) + "?");
                 counter++;
                 attempts.setText(String.valueOf(counter));
             }
@@ -42,14 +51,17 @@ public class NumberGame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 String message = "<html>The number you wished is: " + (int) guessedNumber + "<br>I guessed it in " + counter + " tries</html>";
-                if(highLimit == guessedNumber + 1 && lowLimit == guessedNumber - 1){
+                if(highLimit == guessedNumber + 1 && (lowLimit == guessedNumber - 1 || lowLimit - 1 == 0)){
                     JOptionPane.showMessageDialog(frame, message, "Victory", JOptionPane.INFORMATION_MESSAGE);
+                    buttonStart.setVisible(true);
+                    buttonGreater.setEnabled(false);
+                    return;
                 }
 
-                highLimit = guessedNumber;
+                highLimit = (int) guessedNumber;
                 guessedNumber = Math.floor((highLimit + lowLimit) / 2);
 
-                textField.setText( String.valueOf((int) guessedNumber) + "?");
+                textField.setText(text + String.valueOf((int) guessedNumber) + "?");
                 counter++;
                 attempts.setText(String.valueOf(counter));
 
@@ -59,14 +71,17 @@ public class NumberGame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 String message = "<html>The number you wished is: " + (int) guessedNumber + "<br>I guessed it in " + counter + " tries</html>";
-                if(highLimit == guessedNumber + 1 && lowLimit == guessedNumber - 1){
+                if((highLimit == guessedNumber + 1 || highLimit + 1 == 101) && lowLimit == guessedNumber - 1){
                     JOptionPane.showMessageDialog(frame, message, "Victory", JOptionPane.INFORMATION_MESSAGE);
+                    buttonStart.setVisible(true);
+                    buttonSmaller.setEnabled(false);
+                    return;
                 }
 
-                lowLimit = guessedNumber;
+                lowLimit = (int) guessedNumber;
                 guessedNumber = Math.ceil((highLimit + guessedNumber) / 2);
 
-                textField.setText( String.valueOf((int) guessedNumber) + "?");
+                textField.setText(text + String.valueOf((int) guessedNumber) + "?");
                 counter++;
                 attempts.setText(String.valueOf(counter));
                 
@@ -83,7 +98,4 @@ public class NumberGame {
 
     }
 
-    void ShowMessage(double result){
-
-    }
 }
