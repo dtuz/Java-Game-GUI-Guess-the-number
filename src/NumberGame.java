@@ -5,7 +5,7 @@ import java.awt.event.ActionListener;
 public class NumberGame {
     private double guessedNumber;
     private double lowLimit = 1;
-    private double highLimit = 100;
+    private double highLimit = 101;
     private int counter = 0;
 
     private JPanel NumberGame;
@@ -15,14 +15,15 @@ public class NumberGame {
     private JButton buttonGreater;
     private JTextField attempts;
     private JButton buttonStart;
+    private JButton buttonGuessedNumber;
 
     public NumberGame(){
         String text = textField.getText();
         buttonSmaller.setVisible(false);
+        buttonGuessedNumber.setVisible(false);
         buttonGreater.setVisible(false);
         textField.setFocusable(false);
         attempts.setFocusable(false);
-
         JFrame frame = new JFrame("Input Dialog Example");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setSize(300, 200);
@@ -38,10 +39,11 @@ public class NumberGame {
                     counter = 0;
                 }
 
-                guessedNumber = (highLimit + lowLimit) / 2;
+                guessedNumber = 50;
                 buttonSmaller.setVisible(true);
                 buttonGreater.setVisible(true);
                 buttonStart.setVisible(false);
+                buttonGuessedNumber.setVisible(true);
                 textField.setText(text + String.valueOf((int) guessedNumber) + "?");
                 counter++;
                 attempts.setText(String.valueOf(counter));
@@ -51,7 +53,8 @@ public class NumberGame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 String message = "<html>The number you wished is: " + (int) guessedNumber + "<br>I guessed it in " + counter + " tries</html>";
-                if(highLimit == guessedNumber + 1 && (lowLimit == guessedNumber - 1 || lowLimit - 1 == 0)){
+                if
+                (lowLimit == guessedNumber - 1){
                     JOptionPane.showMessageDialog(frame, message, "Victory", JOptionPane.INFORMATION_MESSAGE);
                     buttonStart.setVisible(true);
                     buttonGreater.setEnabled(false);
@@ -71,20 +74,35 @@ public class NumberGame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 String message = "<html>The number you wished is: " + (int) guessedNumber + "<br>I guessed it in " + counter + " tries</html>";
-                if((highLimit == guessedNumber + 1 || highLimit + 1 == 101) && lowLimit == guessedNumber - 1){
+                if(highLimit == guessedNumber + 1){
                     JOptionPane.showMessageDialog(frame, message, "Victory", JOptionPane.INFORMATION_MESSAGE);
                     buttonStart.setVisible(true);
-                    buttonSmaller.setEnabled(false);
+                    buttonSmaller.setVisible(false);
+                    buttonGreater.setVisible(false);
+                    buttonGuessedNumber.setVisible(false);
                     return;
                 }
 
                 lowLimit = (int) guessedNumber;
-                guessedNumber = Math.ceil((highLimit + guessedNumber) / 2);
+                guessedNumber = Math.floor((highLimit + guessedNumber) / 2);
 
                 textField.setText(text + String.valueOf((int) guessedNumber) + "?");
                 counter++;
                 attempts.setText(String.valueOf(counter));
-                
+
+            }
+        });
+        buttonGuessedNumber.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                String message = "<html>The number you wished is: " + (int) guessedNumber + "<br>I guessed it in " + counter + " tries</html>";
+
+                JOptionPane.showMessageDialog(frame, message, "Victory", JOptionPane.INFORMATION_MESSAGE);
+
+                buttonGuessedNumber.setVisible(false);
+                buttonGreater.setVisible(false);
+                buttonSmaller.setVisible(false);
+                buttonStart.setVisible(true);
             }
         });
     }
@@ -97,5 +115,7 @@ public class NumberGame {
         frame.setVisible(true);
 
     }
+
+
 
 }
