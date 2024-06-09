@@ -47,7 +47,7 @@
           <enabled value="true"/>
           <font name="Tahoma" style="1"/>
           <foreground color="-16777216"/>
-          <text value="Your number is: "/>
+          <text value=""/>
         </properties>
       </component>
       <component id="eb36b" class="javax.swing.JLabel" binding="GameLabel">
